@@ -1,0 +1,84 @@
+services:
+
+  app:
+    build: .
+    container_name: transflow_app
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      mongo:
+        condition: service_started
+      redis:
+        condition: service_started
+    environment:
+      MONGO_URL: mongodb://mongo:27017/
+      REDIS_HOST: redis
+      RABBIT_URL: amqp://guest:guest@rabbitmq:5672/
+
+  consumer:
+    build: .
+    container_name: transflow_consumer
+    command: python3 /app/src/consumer.py
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      mongo:
+        condition: service_started
+      redis:
+        condition: service_started
+    environment:
+      MONGO_URL: mongodb://mongo:27017/
+      REDIS_HOST: redis
+      RABBIT_URL: amqp://guest:guest@rabbitmq:5672/
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - "27017:27017" 
+    volumes:
+      - mongo_data:/data/db
+
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - "6379:6379" 
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      
+  mongo-gui:
+    image: mongo-express
+    container_name: mongo-express-gui
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: password 
+
+  redis-gui:
+    image: rediscommander/redis-commander:latest
+    container_name: redis-commander-gui
+    restart: always
+    ports:
+      - "8082:8081"
+    environment:
+      REDIS_HOSTS: local_redis:redis:6379
+      
+volumes:
+  mongo_data:
