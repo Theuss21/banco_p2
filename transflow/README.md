@@ -17,7 +17,7 @@ O sistema registra corridas, atualiza saldos automaticamente e mantém tudo de f
 
 🐳 Passos de Instalação
 1️⃣ Clonar o repositório
-git clone https://github.com/SEU_USUARIO/transflow-2.0.git
+git clone https://github.com/Theuss21/banco_p2.git
 cd transflow-2.0
 
 2️⃣ Criar arquivo .env
@@ -108,3 +108,4 @@ Este README cobre todos os pontos obrigatórios da avaliação:
 ✔ Instruções de uso e testes
 
 ✔ Captura de tela
+
