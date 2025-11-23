@@ -34,7 +34,7 @@ docker-compose up --build
 
 Isso inicia automaticamente:
 
-API FastAPI → http://localhost:8000
+API FastAPI → http://localhost:8000/docs
 
 RabbitMQ (painel) → http://localhost:15672
  (login: guest / guest)
@@ -55,7 +55,7 @@ Essas variáveis já são referenciadas nos arquivos da aplicação.
 
 📌 Instruções de Uso e Testes
 ➤ 1. Criar uma corrida (POST /corridas)
-curl -X POST http://localhost:8000/corridas \
+curl -X POST \
 -H "Content-Type: application/json" \
 -d '{
   "id_corrida": "abc123",
@@ -106,4 +106,5 @@ Este README cobre todos os pontos obrigatórios da avaliação:
 ✔ Instalação
 ✔ Variáveis de ambiente
 ✔ Instruções de uso e testes
+
 ✔ Captura de tela
